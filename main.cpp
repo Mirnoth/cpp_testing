@@ -14,6 +14,10 @@ int main() {
 			// Escape key pressed
 			if ((Event.Type == sf::Event::KeyPressed) && (Event.Key.Code == sf::Key::Escape))
 				App.Close();
+			if (Event.Key.Code == sf::Key::F1){
+				sf::Image Screen = App.Capture();
+				Screen.SaveToFile("screenshot.jpg");
+			}				
 		}
 		// Clear the screen (fill it with black color)
        App.Clear(sf::Color(200, 200, 0));
