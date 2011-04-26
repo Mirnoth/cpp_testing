@@ -1,15 +1,36 @@
 #include <SFML/System.hpp>
 #include <SFML/Graphics.hpp>
 #include <iostream>
+#include <sstream>
+
+class MakeString
+{
+   public:
+      template <typename T>
+      MakeString& operator<< (const T& value)
+      {
+         myStream << value;
+         return *this;
+      }
+      
+      operator std::string() const
+      {
+         return myStream.str();
+      }
+      
+   private:
+      std::stringstream myStream;
+}; 
+
 int main() {
 	int drawstate=0;
 	sf::RenderWindow App(sf::VideoMode(800, 600, 32), "SFML Window");
 	App.SetFramerateLimit(60);
-	sf::Image Image(100, 100, sf::Color(0, 255, 255));
+	//sf::Image Image(100, 100, sf::Color(0, 255, 255));
 	// Load the sprite image from a file
-	//sf::Image Image;
-	//if (!Image.LoadFromFile("sprite.tga"))
-	//    return EXIT_FAILURE;
+	sf::Image Image;
+	if (!Image.LoadFromFile("textur.png"))
+	    return EXIT_FAILURE;
 	// Create the sprite
 	sf::Sprite Sprite(Image);
 	// Change its properties
@@ -17,6 +38,8 @@ int main() {
 	Sprite.SetPosition(200.f, 100.f);
 	Sprite.SetScale(2.f, 2.f);
 	Sprite.SetCenter(50.f,50.f);
+	sf::Rect<int> SubRect(50,0,100,50);
+	Sprite.SetSubRect(SubRect);
 	// Build a custom convex shape
 	sf::Shape Polygon;
 	Polygon.AddPoint(0, -50,  sf::Color(255, 0, 0),     sf::Color(0, 128, 128));
@@ -51,6 +74,7 @@ int main() {
 	sf::String Text("Use the arrow keys to move the camera\nUse the + and - keys to zoom and unzoom");
 	Text.Move(10, 500);
 	Text.SetColor(sf::Color::White);
+	
 	// Create a view with the same size as the window, located somewhere in the center of the background
 	sf::Vector2f Center(1000, 1000);
 	sf::Vector2f HalfSize(400, 300);
@@ -58,6 +82,7 @@ int main() {
 	// To start, put the cursor at the center
 	Cursor.SetCenter(32, 32);
 	Cursor.SetPosition(Center);
+	
 	while (App.IsOpened()) {
 		sf::Event Event;
 		while (App.GetEvent(Event)) {
@@ -135,6 +160,11 @@ int main() {
 			// Draw some instructions
 			App.Draw(Text);
 		}
+		std::string str = MakeString() << "FPS: " << 1/App.GetFrameTime(); 
+		sf::String Fps(str);
+		Fps.Move(10, 10);
+		Fps.SetColor(sf::Color::White);
+		App.Draw(Fps);
 		// Display window contents on screen
 		App.Display();
 	}
