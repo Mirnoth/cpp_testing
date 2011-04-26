@@ -38,8 +38,7 @@ int main() {
 	Sprite.SetPosition(200.f, 100.f);
 	Sprite.SetScale(2.f, 2.f);
 	Sprite.SetCenter(50.f,50.f);
-	sf::Rect<int> SubRect(50,0,100,50);
-	Sprite.SetSubRect(SubRect);
+	sf::Rect<int> SubRect(0,0,50,70);
 	// Build a custom convex shape
 	sf::Shape Polygon;
 	Polygon.AddPoint(0, -50,  sf::Color(255, 0, 0),     sf::Color(0, 128, 128));
@@ -117,9 +116,13 @@ int main() {
 			if (App.GetInput().IsKeyDown(sf::Key::Right)) Sprite.Move( 100 * ElapsedTime, 0);
 			if (App.GetInput().IsKeyDown(sf::Key::Up))    Sprite.Move(0, -100 * ElapsedTime);
 			if (App.GetInput().IsKeyDown(sf::Key::Down))  Sprite.Move(0,  100 * ElapsedTime);
+			// Move the SubRect
+			if (App.GetInput().IsKeyDown(sf::Key::A))  SubRect.Offset(5,0);
+			if (App.GetInput().IsKeyDown(sf::Key::D))  SubRect.Offset(-5,0);
 			// Rotate the sprite
 			if (App.GetInput().IsKeyDown(sf::Key::Add))      Sprite.Rotate(- 100 * ElapsedTime);
 			if (App.GetInput().IsKeyDown(sf::Key::Subtract)) Sprite.Rotate(+ 100 * ElapsedTime);
+			Sprite.SetSubRect(SubRect);
 			// Display sprite in our window
 			App.Draw(Sprite);
 		} else if(drawstate==1) {
